@@ -12,6 +12,10 @@ on:
 jobs:
 
   login-build-push:
+    env:
+        IMAGE_REGISTRY_GITHUB: ghcr.io/Andrei-Stepanov/ciboard-server
+        IMAGE_REGISTRY_QUAY: quay.io/fedoraci/ciboard-server
+        USER_QUAY: fedoraci+ciboard_github_ci
     name: Build and push image
     runs-on: ubuntu-20.04
     steps:
@@ -28,7 +32,7 @@ jobs:
       with:
         registry: ${{ env.IMAGE_REGISTRY_QUAY }}
         username: ${{ env.USER_QUAY }}
-        password: ${{ env.PASSWORD_QUAY }}
+        password: ${{ secrets.PASSWORD_QUAY }}
 
     - uses: actions/checkout@v2
 
@@ -53,3 +57,5 @@ jobs:
 
     - name: Print image url
       run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
+
+# vim: noai:ts=2:sw=2 et
