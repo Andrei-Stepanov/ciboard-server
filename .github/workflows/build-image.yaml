@@ -52,13 +52,13 @@ jobs:
           ./Dockerfile
 
     - name: Push to Repositories
-      id: push-to-ghcr
+      id: push-to-repo
       uses: redhat-actions/push-to-registry@v2
       with:
         image: ${{ steps.build-image.outputs.image }}
         tags: ${{ steps.build-image.outputs.tags }}
 
     - name: Print image url
-      run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
+      run: echo "Image pushed to ${{ steps.push-to-repo.outputs.registry-paths }}"
 
 # vim: noai:ts=2:sw=2 et
