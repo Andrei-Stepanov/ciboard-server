@@ -42,9 +42,9 @@ jobs:
       with:
         tags: |
             ${{ env.IMAGE_REGISTRY_GITHUB }}:${{ github.sha }}
-            ${{ ( env.BRANCH == 'master' && env.IMAGE_REGISTRY_GITHUB':latest') || '' }}
+            ${{ ( env.BRANCH == 'master' && env.IMAGE_REGISTRY_GITHUB + ':latest') || '' }}
             ${{ env.IMAGE_REGISTRY_QUAY }}:${{ github.sha }}
-            ${{ ( env.BRANCH == 'master' && env.IMAGE_REGISTRY_QUAY':latest') || '' }}
+            ${{ ( env.BRANCH == 'master' && env.IMAGE_REGISTRY_QUAY + ':latest') || '' }}
         containerfiles: |
           ./Dockerfile
 
