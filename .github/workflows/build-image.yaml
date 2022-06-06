@@ -11,12 +11,7 @@ on:
 
 jobs:
 
-  login:
-    name: Log in to image registry
-    runs-on: ubuntu-20.04
-    steps:
-
-  build:
+  login-build-push:
     name: Build and push image
     runs-on: ubuntu-20.04
 
