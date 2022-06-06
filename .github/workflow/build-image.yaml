@@ -1,0 +1,60 @@
+name: Build and Push Image
+
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - master
+      - main
+      - feature-*
+
+jobs:
+
+  login:
+    name: Log in to image registry
+    runs-on: ubuntu-20.04
+    steps:
+
+  build:
+    name: Build and push image
+    runs-on: ubuntu-20.04
+
+    - name: Log in to the GitHub Container registry
+      uses: redhat-actions/podman-login@v1
+      with:
+        registry: ${{ env.IMAGE_REGISTRY_GITHUB }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Log in to Quay.io
+      uses: redhat-actions/podman-login@v1
+      with:
+        registry: ${{ env.IMAGE_REGISTRY_QUAY }}
+        username: ${{ env.USER_QUAY }}
+        password: ${{ env.PASSWORD_QUAY }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Image
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        tags: |
+            ${{ env.IMAGE_REGISTRY_GITHUB }}:${{ github.sha }}
+            ${{ ( env.BRANCH == 'master' && env.IMAGE_REGISTRY_GITHUB':latest') || '' }}
+            ${{ env.IMAGE_REGISTRY_QUAY }}:${{ github.sha }}
+            ${{ ( env.BRANCH == 'master' && env.IMAGE_REGISTRY_QUAY':latest') || '' }}
+        containerfiles: |
+          ./Dockerfile
+
+    - name: Push to Repositories
+      id: push-to-ghcr
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build-image.outputs.image }}
+        tags: ${{ steps.build-image.outputs.tags }}
+
+    - name: Print image url
+      run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
