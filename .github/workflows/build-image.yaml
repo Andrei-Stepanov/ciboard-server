@@ -36,8 +36,8 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Set outputs
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
     - name: Build Image
       id: build-image
