@@ -14,6 +14,7 @@ jobs:
   login-build-push:
     name: Build and push image
     runs-on: ubuntu-20.04
+    steps:
 
     - name: Log in to the GitHub Container registry
       uses: redhat-actions/podman-login@v1
@@ -29,7 +30,6 @@ jobs:
         username: ${{ env.USER_QUAY }}
         password: ${{ env.PASSWORD_QUAY }}
 
-    steps:
     - uses: actions/checkout@v2
 
     - name: Build Image
